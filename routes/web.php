@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ApiTokenController;
 
 
 /*
@@ -19,6 +20,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/tokens', [ApiTokenController::class, 'generate']);
+Route::post('/login', [ApiTokenController::class, 'authenticate'])->name('login');
 
 Route::prefix('reservations')->group(function () {
     Route::get('/', [ReservationController::class, 'index']);

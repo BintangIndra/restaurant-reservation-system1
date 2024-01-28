@@ -19,5 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/tokens', [ApiTokenController::class, 'generate']);
-Route::post('/login', [ApiTokenController::class, 'authenticate']);
+Route::post('/test', function () {
+    return 'Test Route';
+});
+

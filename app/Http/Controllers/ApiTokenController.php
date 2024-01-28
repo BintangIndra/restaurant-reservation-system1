@@ -32,21 +32,33 @@ class ApiTokenController extends Controller
 
     public function authenticate(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        if(Auth::attempt($credentials))
-        {
-            $token = $user->createToken('api-token')->plainTextToken;
-            $request->session()->regenerate();
-            return ['token' => $token];
+        try {
+            // Debugging statement
+            dd('Reached authenticate method');
+    
+            $credentials = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required'
+            ]);
+    
+            // Debugging statement
+            dd('Credentials validated');
+    
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+                $token = $user->createToken('api-token')->plainTextToken;
+                $request->session()->regenerate();
+                return ['token' => $token];
+            }
+    
+            return back()->withErrors([
+                'email' => 'Your provided credentials do not match in our records.',
+            ])->onlyInput('email');
+    
+        } catch (\Exception $e) {
+            // Debugging statement
+            dd($e->getMessage());
         }
-
-        return back()->withErrors([
-            'email' => 'Your provided credentials do not match in our records.',
-        ])->onlyInput('email');
 
     }
 }
